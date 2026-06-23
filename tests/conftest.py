@@ -44,3 +44,45 @@ def auto_enable_custom_integrations(enable_custom_integrations):
 def mock_attrs() -> dict[str, str]:
     """A fresh, mutable copy of the attribute payload per test."""
     return dict(MOCK_ATTRS)
+
+
+from unittest.mock import AsyncMock, patch
+
+from homeassistant.const import CONF_EMAIL, CONF_PASSWORD
+from pytest_homeassistant_custom_component.common import MockConfigEntry
+
+from custom_components.whirlpool_microwave.const import CONF_BRAND, CONF_REGION, DOMAIN
+from custom_components.whirlpool_microwave.microwave import Microwave
+
+ENTRY_DATA = {
+    CONF_EMAIL: "user@example.com",
+    CONF_PASSWORD: "secret",
+    CONF_REGION: "US",
+    CONF_BRAND: "Whirlpool",
+    "said": "FAKESAID00001",
+    "name": "Kitchen Microwave",
+    "model": "WMH78019HZ01",
+    "data_model": "DDM_COOKING_MHC76_V1",
+}
+
+
+async def setup_integration(hass, attrs: dict[str, str]):
+    """Set up the integration with auth + fetch_data mocked; entity state reads `attrs`."""
+    entry = MockConfigEntry(domain=DOMAIN, data=ENTRY_DATA, unique_id="FAKESAID00001")
+    entry.add_to_hass(hass)
+
+    async def fake_fetch(self):
+        self._data_dict = {"attributes": {k: {"value": v} for k, v in attrs.items()}}
+        return True
+
+    with (
+        patch("custom_components.whirlpool_microwave.Auth.do_auth", new=AsyncMock()),
+        patch(
+            "custom_components.whirlpool_microwave.Auth.is_access_token_valid",
+            return_value=True,
+        ),
+        patch.object(Microwave, "fetch_data", new=fake_fetch),
+    ):
+        await hass.config_entries.async_setup(entry.entry_id)
+        await hass.async_block_till_done()
+    return entry
