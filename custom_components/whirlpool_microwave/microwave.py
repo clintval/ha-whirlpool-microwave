@@ -14,7 +14,6 @@ class Microwave(Appliance):
     / attr_value_to_bool helpers. All device values are strings on the wire.
     """
 
-    # --- hood light ---
     def get_light_level(self) -> str | None:
         value = self._get_attribute(const.ATTR_LIGHT)
         return None if value is None else const.LIGHT_VALUE_TO_LEVEL.get(value)
@@ -24,7 +23,6 @@ class Microwave(Appliance):
             raise ValueError(f"invalid hood light level: {level!r}")
         return await self.send_attributes({const.ATTR_LIGHT: const.LIGHT_LEVELS[level]})
 
-    # --- hood fan ---
     def get_fan_speed(self) -> str | None:
         value = self._get_attribute(const.ATTR_FAN)
         return None if value is None else const.FAN_VALUE_TO_SPEED.get(value)
@@ -34,7 +32,6 @@ class Microwave(Appliance):
             raise ValueError(f"invalid hood fan speed: {speed!r}")
         return await self.send_attributes({const.ATTR_FAN: const.FAN_SPEEDS[speed]})
 
-    # --- switches ---
     def get_quiet_mode(self) -> bool | None:
         return self.attr_value_to_bool(self._get_attribute(const.ATTR_QUIET))
 
@@ -53,7 +50,6 @@ class Microwave(Appliance):
     async def set_turntable(self, on: bool) -> bool:
         return await self.send_attributes({const.ATTR_TURNTABLE: self.bool_to_attr_value(on)})
 
-    # --- status (read only) ---
     def get_door_open(self) -> bool | None:
         return self.attr_value_to_bool(self._get_attribute(const.ATTR_DOOR))
 
