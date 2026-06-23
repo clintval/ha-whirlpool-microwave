@@ -1,0 +1,1 @@
+"""Whirlpool Microwave custom integration."""
