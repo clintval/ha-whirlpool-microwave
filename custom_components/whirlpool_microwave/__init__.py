@@ -20,7 +20,7 @@ from .microwave import Microwave
 _LOGGER = logging.getLogger(__name__)
 
 # platform tasks (light, fan, switch, binary_sensor, sensor) append their Platform here as each is added
-PLATFORMS: list[Platform] = []
+PLATFORMS: list[Platform] = [Platform.LIGHT]
 
 type WhirlpoolMicrowaveConfigEntry = ConfigEntry[WhirlpoolMicrowaveCoordinator]
 
