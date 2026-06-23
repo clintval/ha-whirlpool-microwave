@@ -1,8 +1,8 @@
-# ha-whirlpool-hood
+# ha-whirlpool-microwave
 
 Home Assistant support for the Whirlpool over-the-range microwave-hood combo: the hood light and exhaust fan, plus the microwave's controllable surface. Whirlpool's official HA integration covers no `Cooking`-category appliances, so this fills the gap until it lands upstream.
 
-Status: pre-release. The cloud protocol is reverse-engineered and read + write are confirmed against real hardware (see `scripts/`); the custom component is in progress.
+The cloud protocol is reverse-engineered and confirmed against real hardware (see `scripts/`); the integration exposes the hood light, exhaust fan, switches, and status sensors, and is validated end to end against a real device.
 
 ## Device
 
@@ -22,9 +22,9 @@ Read-only status: door open (`Mwo_OperationStatusDoorOpen`), running (`Mwo_ModeS
 
 ## Install (HACS)
 
-Once the component ships a release:
+Install in Home Assistant via HACS as a custom repository:
 
-HACS → three-dot menu → Custom repositories → add `https://github.com/clintval/ha-whirlpool-hood` as an Integration → install → restart HA → Settings → Devices & Services → Add Integration → "Whirlpool Hood".
+HACS → three-dot menu → Custom repositories → add `https://github.com/clintval/ha-whirlpool-microwave` as an Integration → install → restart HA → Settings → Devices & Services → Add Integration → "Whirlpool Microwave".
 
 ## scripts/
 

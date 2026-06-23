@@ -1,0 +1,45 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "description": "Sign in with your Whirlpool account. The integration finds your microwave-hood automatically.",
+        "data": {
+          "email": "Email",
+          "password": "Password",
+          "region": "Region",
+          "brand": "Brand"
+        }
+      }
+    },
+    "error": {
+      "account_locked": "This account is locked. Check the Whirlpool app.",
+      "cannot_connect": "Failed to connect to the Whirlpool cloud.",
+      "invalid_auth": "Invalid email or password.",
+      "no_appliance": "No Cooking appliance was found on this account.",
+      "unknown": "Unexpected error."
+    },
+    "abort": {
+      "already_configured": "This appliance is already configured."
+    }
+  },
+  "entity": {
+    "light": {
+      "hood_light": { "name": "Hood light" }
+    },
+    "fan": {
+      "hood_fan": { "name": "Hood fan" }
+    },
+    "switch": {
+      "quiet_mode": { "name": "Quiet mode" },
+      "control_lock": { "name": "Control lock" },
+      "turntable": { "name": "Turntable" }
+    },
+    "binary_sensor": {
+      "door": { "name": "Door" },
+      "running": { "name": "Running" }
+    },
+    "sensor": {
+      "cook_time_remaining": { "name": "Cook time remaining" }
+    }
+  }
+}
