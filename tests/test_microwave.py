@@ -67,6 +67,30 @@ async def test_set_quiet_mode():
     microwave.send_attributes.assert_awaited_once_with({const.ATTR_QUIET: "1"})
 
 
+@pytest.mark.parametrize("value,expected", [("1", True), ("0", False)])
+def test_get_control_lock(value, expected):
+    assert make_microwave({const.ATTR_LOCK: value}).get_control_lock() is expected
+
+
+async def test_set_control_lock():
+    microwave = make_microwave({})
+    microwave.send_attributes = AsyncMock(return_value=True)
+    assert await microwave.set_control_lock(True) is True
+    microwave.send_attributes.assert_awaited_once_with({const.ATTR_LOCK: "1"})
+
+
+@pytest.mark.parametrize("value,expected", [("1", True), ("0", False)])
+def test_get_turntable(value, expected):
+    assert make_microwave({const.ATTR_TURNTABLE: value}).get_turntable() is expected
+
+
+async def test_set_turntable():
+    microwave = make_microwave({})
+    microwave.send_attributes = AsyncMock(return_value=True)
+    assert await microwave.set_turntable(True) is True
+    microwave.send_attributes.assert_awaited_once_with({const.ATTR_TURNTABLE: "1"})
+
+
 @pytest.mark.parametrize("idle,running", [("1", False), ("0", True)])
 def test_get_running_inverts_idle(idle, running):
     assert make_microwave({const.ATTR_IDLE: idle}).get_running() is running
@@ -80,5 +104,10 @@ def test_get_cook_time_remaining():
     assert make_microwave({const.ATTR_COOK_REMAINING: "90"}).get_cook_time_remaining() == 90
 
 
-def test_get_door_open():
-    assert make_microwave({const.ATTR_DOOR: "1"}).get_door_open() is True
+@pytest.mark.parametrize("value,expected", [("1", True), ("0", False)])
+def test_get_door_open(value, expected):
+    assert make_microwave({const.ATTR_DOOR: value}).get_door_open() is expected
+
+
+def test_get_door_open_missing():
+    assert make_microwave({}).get_door_open() is None
