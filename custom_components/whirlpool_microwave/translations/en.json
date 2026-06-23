@@ -12,9 +12,11 @@
       }
     },
     "error": {
+      "account_locked": "This account is locked. Check the Whirlpool app.",
       "cannot_connect": "Failed to connect to the Whirlpool cloud.",
       "invalid_auth": "Invalid email or password.",
-      "no_appliance": "No Cooking appliance was found on this account."
+      "no_appliance": "No Cooking appliance was found on this account.",
+      "unknown": "Unexpected error."
     },
     "abort": {
       "already_configured": "This appliance is already configured."

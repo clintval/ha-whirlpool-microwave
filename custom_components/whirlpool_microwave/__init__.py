@@ -8,8 +8,7 @@ from homeassistant.const import CONF_EMAIL, CONF_PASSWORD, Platform
 from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import ConfigEntryAuthFailed, ConfigEntryNotReady
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
-from whirlpool.appliance import Appliance  # noqa: F401 - ensures library import is valid
-from whirlpool.auth import Auth
+from whirlpool.auth import AccountLockedError, Auth
 from whirlpool.backendselector import BackendSelector, Brand, Region
 from whirlpool.types import ApplianceInfo
 
@@ -19,7 +18,6 @@ from .microwave import Microwave
 
 _LOGGER = logging.getLogger(__name__)
 
-# platform tasks (light, fan, switch, binary_sensor, sensor) append their Platform here as each is added
 PLATFORMS: list[Platform] = [Platform.LIGHT, Platform.FAN, Platform.SWITCH, Platform.BINARY_SENSOR, Platform.SENSOR]
 
 type WhirlpoolMicrowaveConfigEntry = ConfigEntry[WhirlpoolMicrowaveCoordinator]
@@ -34,6 +32,8 @@ async def async_setup_entry(hass: HomeAssistant, entry: WhirlpoolMicrowaveConfig
     auth = Auth(backend, entry.data[CONF_EMAIL], entry.data[CONF_PASSWORD], session)
     try:
         await auth.do_auth(store=False)
+    except AccountLockedError as err:
+        raise ConfigEntryAuthFailed("Whirlpool account is locked") from err
     except Exception as err:  # noqa: BLE001
         raise ConfigEntryNotReady(f"could not reach Whirlpool cloud: {err}") from err
     if not auth.is_access_token_valid():

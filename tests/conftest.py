@@ -1,7 +1,13 @@
 """Shared fixtures for the Whirlpool Microwave tests."""
+from unittest.mock import AsyncMock, patch
+
 import pytest
+from homeassistant.const import CONF_EMAIL, CONF_PASSWORD
+from pytest_homeassistant_custom_component.common import MockConfigEntry
 
 from custom_components.whirlpool_microwave import const
+from custom_components.whirlpool_microwave.const import CONF_BRAND, CONF_REGION, DOMAIN
+from custom_components.whirlpool_microwave.microwave import Microwave
 
 # A representative attribute payload: light off, fan off, switches on, idle.
 MOCK_ATTRS: dict[str, str] = {
@@ -17,7 +23,7 @@ MOCK_ATTRS: dict[str, str] = {
 }
 
 # Owned-appliances response shape returned by the cloud (one Cooking unit).
-ACCOUNT_ID = "1234567"
+ACCOUNT_ID: str = "1234567"
 MOCK_OWNED = {
     ACCOUNT_ID: {
         "Kitchen": [
@@ -45,14 +51,6 @@ def mock_attrs() -> dict[str, str]:
     """A fresh, mutable copy of the attribute payload per test."""
     return dict(MOCK_ATTRS)
 
-
-from unittest.mock import AsyncMock, patch
-
-from homeassistant.const import CONF_EMAIL, CONF_PASSWORD
-from pytest_homeassistant_custom_component.common import MockConfigEntry
-
-from custom_components.whirlpool_microwave.const import CONF_BRAND, CONF_REGION, DOMAIN
-from custom_components.whirlpool_microwave.microwave import Microwave
 
 ENTRY_DATA = {
     CONF_EMAIL: "user@example.com",

@@ -2,6 +2,12 @@
 
 DOMAIN = "whirlpool_microwave"
 
+# Attribute names use the device's real Whirlpool protocol namespaces:
+#   Hood_  = hood vent subsystem
+#   Mwo_   = microwave oven subsystem
+#   Sys_   = system-level (shared) subsystem
+# These prefixes are not a naming mistake; they mirror the cloud API.
+
 # Controllable attributes (write + read).
 ATTR_LIGHT = "Hood_OperationSetSurfaceLight"
 ATTR_FAN = "Hood_OperationSetExhaustFanSpeed"

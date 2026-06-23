@@ -14,7 +14,10 @@ from homeassistant.util.percentage import (
 
 from . import WhirlpoolMicrowaveConfigEntry
 from .const import FAN_ORDERED
+from .coordinator import WhirlpoolMicrowaveCoordinator
 from .entity import WhirlpoolMicrowaveEntity
+
+PARALLEL_UPDATES = 1
 
 
 async def async_setup_entry(
@@ -34,7 +37,7 @@ class WhirlpoolMicrowaveFan(WhirlpoolMicrowaveEntity, FanEntity):
     )
     _attr_speed_count = len(FAN_ORDERED)
 
-    def __init__(self, coordinator) -> None:
+    def __init__(self, coordinator: WhirlpoolMicrowaveCoordinator) -> None:
         super().__init__(coordinator, key="fan")
 
     @property

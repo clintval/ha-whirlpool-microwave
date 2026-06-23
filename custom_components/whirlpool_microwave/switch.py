@@ -11,8 +11,11 @@ from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
 
 from . import WhirlpoolMicrowaveConfigEntry
+from .coordinator import WhirlpoolMicrowaveCoordinator
 from .entity import WhirlpoolMicrowaveEntity
 from .microwave import Microwave
+
+PARALLEL_UPDATES = 1
 
 
 @dataclass(frozen=True, kw_only=True)
@@ -55,7 +58,7 @@ async def async_setup_entry(
 class WhirlpoolMicrowaveSwitch(WhirlpoolMicrowaveEntity, SwitchEntity):
     entity_description: MicrowaveSwitchDescription
 
-    def __init__(self, coordinator, description: MicrowaveSwitchDescription) -> None:
+    def __init__(self, coordinator: WhirlpoolMicrowaveCoordinator, description: MicrowaveSwitchDescription) -> None:
         super().__init__(coordinator, key=description.key)
         self.entity_description = description
 

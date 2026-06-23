@@ -14,8 +14,11 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
 
 from . import WhirlpoolMicrowaveConfigEntry
+from .coordinator import WhirlpoolMicrowaveCoordinator
 from .entity import WhirlpoolMicrowaveEntity
 from .microwave import Microwave
+
+PARALLEL_UPDATES = 1
 
 
 @dataclass(frozen=True, kw_only=True)
@@ -49,7 +52,7 @@ class WhirlpoolMicrowaveSensor(WhirlpoolMicrowaveEntity, SensorEntity):
     entity_description: MicrowaveSensorDescription
 
     def __init__(
-        self, coordinator, description: MicrowaveSensorDescription
+        self, coordinator: WhirlpoolMicrowaveCoordinator, description: MicrowaveSensorDescription
     ) -> None:
         super().__init__(coordinator, key=description.key)
         self.entity_description = description

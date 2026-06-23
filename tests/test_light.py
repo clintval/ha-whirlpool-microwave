@@ -2,6 +2,7 @@
 from unittest.mock import AsyncMock, patch
 
 import pytest
+from homeassistant.exceptions import HomeAssistantError
 
 from custom_components.whirlpool_microwave.light import brightness_to_level, level_to_brightness
 from tests.conftest import MOCK_ATTRS, setup_integration
@@ -33,3 +34,43 @@ async def test_light_turn_on_high(hass):
             "light", "turn_on", {"entity_id": eid}, blocking=True
         )
     set_level.assert_awaited_once_with("high")
+
+
+async def test_light_turn_on_brightness_low(hass):
+    """turn_on with brightness=100 (below boundary 191) should call set_light_level('low')."""
+    attrs = dict(MOCK_ATTRS)
+    await setup_integration(hass, attrs)
+
+    light_ids = hass.states.async_entity_ids("light")
+    assert len(light_ids) == 1
+    eid = light_ids[0]
+
+    with patch(
+        "custom_components.whirlpool_microwave.microwave.Microwave.set_light_level",
+        new=AsyncMock(return_value=True),
+    ) as set_level:
+        await hass.services.async_call(
+            "light", "turn_on", {"entity_id": eid, "brightness": 100}, blocking=True
+        )
+    set_level.assert_awaited_once_with("low")
+
+
+async def test_light_turn_on_set_level_failure_raises(hass):
+    """When set_light_level returns False, turn_on should raise HomeAssistantError."""
+    attrs = dict(MOCK_ATTRS)
+    await setup_integration(hass, attrs)
+
+    light_ids = hass.states.async_entity_ids("light")
+    assert len(light_ids) == 1
+    eid = light_ids[0]
+
+    with (
+        patch(
+            "custom_components.whirlpool_microwave.microwave.Microwave.set_light_level",
+            new=AsyncMock(return_value=False),
+        ),
+        pytest.raises(HomeAssistantError),
+    ):
+        await hass.services.async_call(
+            "light", "turn_on", {"entity_id": eid}, blocking=True
+        )

@@ -14,7 +14,7 @@ _LOGGER = logging.getLogger(__name__)
 
 
 class WhirlpoolMicrowaveCoordinator(DataUpdateCoordinator[None]):
-    """Refreshes the hood's attribute payload on an interval."""
+    """Refreshes the microwave's attribute payload on an interval."""
 
     def __init__(self, hass: HomeAssistant, microwave: Microwave, model: str) -> None:
         super().__init__(

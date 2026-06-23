@@ -9,7 +9,10 @@ from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
 
 from . import WhirlpoolMicrowaveConfigEntry
+from .coordinator import WhirlpoolMicrowaveCoordinator
 from .entity import WhirlpoolMicrowaveEntity
+
+PARALLEL_UPDATES = 1
 
 LEVEL_BRIGHTNESS = {"low": 128, "high": 255}
 BRIGHTNESS_BOUNDARY = 191  # <= boundary -> low, above -> high
@@ -36,7 +39,7 @@ class WhirlpoolMicrowaveLight(WhirlpoolMicrowaveEntity, LightEntity):
     _attr_supported_color_modes = {ColorMode.BRIGHTNESS}
     _attr_translation_key = "hood_light"
 
-    def __init__(self, coordinator) -> None:
+    def __init__(self, coordinator: WhirlpoolMicrowaveCoordinator) -> None:
         super().__init__(coordinator, key="light")
         self._last_on_level = "high"
 
